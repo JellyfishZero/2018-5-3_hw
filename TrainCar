@@ -1,0 +1,116 @@
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Scanner;
+import java.util.Stack;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+/**
+ *
+ * @author Alexander
+ */
+public class CBF105001 {
+
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        System.out.printf("請輸入欲排列之車廂號碼：");
+        String cars_str = scan.nextLine();
+        String cars[] = cars_str.split("\\s+");
+        reverse(cars);
+        System.out.println("輸入端："+Arrays.toString(cars));
+//        for (String car : cars) {
+//            System.out.print(car + " ");
+//        }
+        process(cars);
+
+    }
+
+    private static void reverse(String[] cars) {
+        for (int i = 0; i < cars.length / 2; i++) {
+            String car = cars[i];
+            cars[i] = cars[cars.length - 1 - i];
+            cars[cars.length - 1 - i] = car;
+        }
+    }
+
+    public static ArrayList<Stack<Integer>> railroads = new ArrayList();
+    public static ArrayList<Integer> outPutRailroad = new ArrayList<>();
+
+    private static void process(String[] cars) {
+        //String cars to Integer cars
+        int[] nCars = new int[cars.length];
+        for (int i = 0; i < nCars.length; i++) {
+            nCars[i] = Integer.parseInt(cars[i]);
+        }
+
+        int currentNo = 1, maxsize;
+
+        for (int i = nCars.length - 1; i >= 0; i--) {
+//            System.out.println(currentNo + " " + nCars[i]);
+            //從當前的數字找
+            if (currentNo == nCars[i]) {
+                System.out.println("直接從來源輸出車廂" + currentNo);
+                outPutRailroad.add(currentNo);
+                currentNo++;
+                int j = 0;
+                //從緩衝鐵軌找車廂
+                while (j < railroads.size()) {
+                    if (railroads.get(j).isEmpty()) {
+                        j++;
+                        if (j >= railroads.size()) {
+                            break;
+                        }
+                    }
+                    if (!railroads.get(j).isEmpty()) {
+                        if (currentNo == railroads.get(j).peek()) {
+                            System.out.println("從緩衝鐵軌輸出車廂" + currentNo);
+                            railroads.get(j).pop();
+                            outPutRailroad.add(currentNo);
+                            currentNo++;
+                            j = -1;
+                        }
+                    }
+                    j++;
+                }
+//                outPut(currentNo, railroads);
+            } else {
+                System.out.println(nCars[i]+"進入緩衝鐵軌");
+                pushToBuffer(nCars[i], railroads);
+            }
+        }
+        System.out.println("本題所需的緩衝鐵軌數為" + railroads.size());
+        Collections.reverse(outPutRailroad);
+        System.out.println("輸出端：" + outPutRailroad);
+    }
+
+    private static void outPut(int currentNo, ArrayList<Stack<Integer>> railroads) {
+
+//        for (int i = 0; i < railroads.size(); i++) {
+//            if (railroads.get(i).peek() == currentNo) {
+//                outPutRailroad.add(railroads.get(i).peek());
+//                railroads.get(i).pop();
+//            }
+//        }
+    }
+
+    private static void pushToBuffer(int nCar, ArrayList<Stack<Integer>> railroads) {
+        if (!railroads.isEmpty()) {
+            for (int i = 0; i < railroads.size(); i++) {
+                if (railroads.get(i).peek() > nCar || railroads.get(i).isEmpty()) {
+                    railroads.get(i).push(nCar);
+                    System.out.println(railroads);
+                    return;
+                }
+            }
+        }
+        Stack<Integer> s = new Stack<>();
+        s.push(nCar);
+        railroads.add(s);
+        System.out.println(railroads);
+    }
+}
