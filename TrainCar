@@ -21,7 +21,6 @@ public class CBF105001 {
         System.out.printf("請輸入欲排列之車廂號碼：");
         String cars_str = scan.nextLine();
         String cars[] = cars_str.split("\\s+");
-        reverse(cars);
         System.out.println("輸入端："+Arrays.toString(cars));
 //        for (String car : cars) {
 //            System.out.print(car + " ");
@@ -102,7 +101,7 @@ public class CBF105001 {
     private static void pushToBuffer(int nCar, ArrayList<Stack<Integer>> railroads) {
         if (!railroads.isEmpty()) {
             for (int i = 0; i < railroads.size(); i++) {
-                if (railroads.get(i).peek() > nCar || railroads.get(i).isEmpty()) {
+                if  (railroads.get(i).isEmpty() || railroads.get(i).peek() > nCar ) {
                     railroads.get(i).push(nCar);
                     System.out.println(railroads);
                     return;
