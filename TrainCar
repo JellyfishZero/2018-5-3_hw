@@ -70,6 +70,7 @@ public class CBF105001 {
                         if (currentNo == railroads.get(j).peek()) {
                             System.out.println("從緩衝鐵軌輸出車廂" + currentNo);
                             railroads.get(j).pop();
+                            System.out.println(railroads);
                             outPutRailroad.add(currentNo);
                             currentNo++;
                             j = -1;
